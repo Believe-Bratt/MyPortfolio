@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Modern personal portfolio - Web Developer | Designer | Innovator" />
+    <title>Your Name — Portfolio</title>
+
+    <!-- Theme boot: avoid FOUC -->
+    <script>
+      (function () {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if ((stored === 'dark') || (!stored && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Google Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+            colors: {
+              primary: {
+                50: '#eef2ff',
+                100: '#e0e7ff',
+                200: '#c7d2fe',
+                300: '#a5b4fc',
+                400: '#818cf8',
+                500: '#6366f1',
+                600: '#4f46e5',
+                700: '#4338ca',
+                800: '#3730a3',
+                900: '#312e81'
+              }
+            },
+            boxShadow: {
+              soft: '0 10px 25px -5px rgba(0,0,0,0.08), 0 10px 10px -5px rgba(0,0,0,0.04)',
+              glow: '0 0 0 3px rgba(99,102,241,0.2)',
+            },
+            backgroundImage: {
+              'hero-gradient': 'radial-gradient(1200px 600px at 90% -10%, rgba(99,102,241,.35), rgba(99,102,241,0)), radial-gradient(1000px 500px at -20% 10%, rgba(16,185,129,.25), rgba(16,185,129,0))',
+            },
+          }
+        },
+        darkMode: 'class'
+      };
+    </script>
+
+    <style>
+      /* Reveal animations */
+      .reveal { opacity: 0; transform: translateY(16px); transition: opacity 700ms ease, transform 700ms ease; will-change: opacity, transform; }
+      .reveal.reveal-active { opacity: 1; transform: none; }
+      .reveal-left { opacity: 0; transform: translateX(-24px); transition: opacity 700ms ease, transform 700ms ease; }
+      .reveal-right { opacity: 0; transform: translateX(24px); transition: opacity 700ms ease, transform 700ms ease; }
+      .reveal-left.reveal-active, .reveal-right.reveal-active { opacity: 1; transform: none; }
+
+      /* Type cursor */
+      .type-cursor { position: relative; }
+      .type-cursor::after { content: ''; position: absolute; width: 2px; height: 1.1em; background: currentColor; right: -6px; top: 0; animation: blink 1s step-end infinite; }
+      @keyframes blink { 50% { opacity: 0; } }
+
+      /* Glass effect */
+      .glass { backdrop-filter: saturate(120%) blur(10px); -webkit-backdrop-filter: saturate(120%) blur(10px); }
+
+      /* Toast animation */
+      .toast-enter { opacity: 0; transform: translateY(8px); }
+      .toast-enter.toast-show { opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reveal, .reveal-left, .reveal-right { transition: none !important; }
+      }
+    </style>
+  </head>
+  <body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
+    <!-- Scroll progress bar -->
+    <div class="fixed top-0 left-0 right-0 z-[60] h-1.5 bg-transparent">
+      <div id="scrollProgress" class="h-full w-0 bg-gradient-to-r from-primary-600 via-fuchsia-500 to-emerald-400"></div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50">
+      <div class="glass border-b border-slate-200/60 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/70">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex h-16 items-center justify-between">
+            <a href="#home" class="flex items-center gap-2 group">
+              <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-primary-500 to-emerald-400 text-white shadow-soft group-hover:shadow-glow transition">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 14.59L8.41 12 13 7.41 14.41 8.83 11.24 12l3.17 3.17L13 16.59z"/></svg>
+              </span>
+              <span class="font-semibold tracking-tight">Your Name</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-1" aria-label="Main Navigation">
+              <a href="#home" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">Home</a>
+              <a href="#about" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">About</a>
+              <a href="#skills" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">Skills</a>
+              <a href="#projects" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">Projects</a>
+              <a href="#services" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">Services</a>
+              <a href="#testimonials" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">Testimonials</a>
+              <a href="#contact" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">Contact</a>
+            </nav>
+
+            <div class="flex items-center gap-1">
+              <button id="scheduleBtn" class="hidden md:inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 text-sm hover:shadow-soft transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M7 11h5v5H7z"/><path d="M17 3h-1V1h-2v2H10V1H8v2H7a2 2 0 00-2 2v13a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2zm0 15H7V8h10v10z"/></svg>
+                Schedule
+              </button>
+              <!-- Theme toggle -->
+              <button id="themeToggle" class="mr-1 inline-flex items-center justify-center h-10 w-10 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 hover:shadow-soft transition" aria-label="Toggle theme">
+                <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 hidden dark:inline" viewBox="0 0 24 24" fill="currentColor"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-1v3h1zm0 19v-3h-1v3h1zM4 12H1v1h3v-1zm19 0h-3v1h3v-1zM6.76 19.16l-1.41 1.42 1.8 1.79 1.41-1.41-1.8-1.8zM18.36 4.22l-1.41-1.41-1.8 1.79 1.41 1.41 1.8-1.79z"/></svg>
+                <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-700 dark:text-sky-300 dark:hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M12.74 2.25a9.75 9.75 0 109.01 13.26 8 8 0 01-9.01-13.26z"/></svg>
+              </button>
+              <!-- Mobile menu button -->
+              <button id="hamburger" class="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 hover:shadow-soft transition" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 glass" role="dialog" aria-label="Mobile Navigation">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <nav class="grid gap-1">
+              <a href="#home" class="mobile-link px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100/70 dark:hover:bg-slate-800/60">Home</a>
+              <a href="#about" class="mobile-link px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100/70 dark:hover:bg-slate-800/60">About</a>
+              <a href="#skills" class="mobile-link px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100/70 dark:hover:bg-slate-800/60">Skills</a>
+              <a href="#projects" class="mobile-link px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100/70 dark:hover:bg-slate-800/60">Projects</a>
+              <a href="#services" class="mobile-link px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100/70 dark:hover:bg-slate-800/60">Services</a>
+              <a href="#testimonials" class="mobile-link px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100/70 dark:hover:bg-slate-800/60">Testimonials</a>
+              <a href="#contact" class="mobile-link px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100/70 dark:hover:bg-slate-800/60">Contact</a>
+              <button id="mobileSchedule" class="mt-1 inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500">Schedule</button>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="relative overflow-hidden bg-hero-gradient dark:[background-image:radial-gradient(1200px_600px_at_90%_-10%,rgba(99,102,241,.25),rgba(99,102,241,0)),radial-gradient(1000px_500px_at_-20%_10%,rgba(16,185,129,.2),rgba(16,185,129,0))]">
+      <div class="absolute inset-0 -z-10 opacity-[0.12] bg-[radial-gradient(circle_at_1px_1px,_rgba(99,102,241,0.2)_1px,_transparent_1px)] [background-size:22px_22px]"></div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 sm:pt-28 sm:pb-32">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div class="reveal">
+            <div class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-slate-900/60 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 shadow-soft">
+              <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+              Open for new opportunities
+            </div>
+            <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
+              Hi, I'm <span class="bg-clip-text text-transparent bg-gradient-to-tr from-primary-500 via-fuchsia-500 to-emerald-400">Your Name</span>
+            </h1>
+            <p class="mt-4 text-xl text-slate-600 dark:text-slate-300 type-cursor" id="typeTarget" aria-label="Typewriter tagline">Web Developer | Designer | Innovator</p>
+            <p class="mt-6 text-slate-600 dark:text-slate-400 max-w-2xl">
+              I craft delightful digital experiences with clean code, thoughtful design, and a focus on performance.
+            </p>
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <a id="downloadCvBtn" href="#" download class="inline-flex items-center gap-2 rounded-xl px-5 py-3 bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft hover:shadow-glow transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zM11 3h2v8h3l-4 4-4-4h3V3z"/></svg>
+                Download CV
+              </a>
+              <a href="#contact" class="inline-flex items-center gap-2 rounded-xl px-5 py-3 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500 text-slate-700 dark:text-slate-200 hover:text-primary-700 dark:hover:text-primary-300 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6.5a.5.5 0 00-.8-.4L12 12 3.8 6.1a.5.5 0 00-.8.4V18a2 2 0 002 2h14a2 2 0 002-2V6.5z"/></svg>
+                Hire Me
+              </a>
+              <button id="heroSchedule" class="inline-flex items-center gap-2 rounded-xl px-5 py-3 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500 text-slate-700 dark:text-slate-200 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M7 11h5v5H7z"/><path d="M17 3h-1V1h-2v2H10V1H8v2H7a2 2 0 00-2 2v13a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2zm0 15H7V8h10v10z"/></svg>
+                Schedule a Call
+              </button>
+            </div>
+            <div class="mt-10 flex items-center gap-4 text-slate-500 dark:text-slate-400">
+              <a href="https://github.com/" target="_blank" rel="noreferrer" class="hover:text-slate-900 dark:hover:text-white transition" aria-label="GitHub">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12a10 10 0 006.838 9.488c.5.092.682-.217.682-.482 0-.237-.009-.867-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.464-1.11-1.464-.907-.62.069-.607.069-.607 1.003.071 1.53 1.03 1.53 1.03.892 1.527 2.341 1.086 2.91.831.091-.647.35-1.086.636-1.337-2.221-.253-4.555-1.111-4.555-4.944 0-1.091.39-1.984 1.03-2.682-.104-.254-.447-1.274.098-2.655 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844a9.56 9.56 0 012.504.337c1.909-1.294 2.748-1.025 2.748-1.025.546 1.381.203 2.401.1 2.655.64.698 1.03 1.59 1.03 2.681 0 3.842-2.337 4.688-4.565 4.938.359.31.678.92.678 1.855 0 1.338-.012 2.418-.012 2.748 0 .268.18.579.688.48A10.002 10.002 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"/></svg>
+              </a>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" class="hover:text-slate-900 dark:hover:text-white transition" aria-label="LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.1c.5-1 1.8-2.2 3.7-2.2 4 0 4.8 2.6 4.8 6V24h-4v-6.6c0-1.6 0-3.6-2.2-3.6s-2.6 1.7-2.6 3.5V24h-4V8z"/></svg>
+              </a>
+              <a href="mailto:you@example.com" class="hover:text-slate-900 dark:hover:text-white transition" aria-label="Email">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6.5a.5.5 0 00-.8-.4L12 12 3.8 6.1a.5.5 0 00-.8.4V18a2 2 0 002 2h14a2 2 0 002-2V6.5z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="relative reveal-right">
+            <div class="absolute -top-8 -right-6 h-56 w-56 rounded-full bg-gradient-to-tr from-primary-500/20 via-fuchsia-500/20 to-emerald-400/20 blur-3xl"></div>
+            <div class="relative mx-auto max-w-md lg:max-w-lg">
+              <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=1200&auto=format&fit=crop" alt="Profile" class="rounded-3xl shadow-soft ring-1 ring-slate-900/10 dark:ring-white/10 hover:scale-[1.02] transition-transform duration-500" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="scroll-mt-28 py-20 sm:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="reveal-left">
+            <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1200&auto=format&fit=crop" alt="Working at desk" class="rounded-3xl shadow-soft ring-1 ring-slate-900/10 dark:ring-white/10 hover:scale-[1.02] transition-transform duration-500" loading="lazy" />
+          </div>
+          <div class="reveal">
+            <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">About Me</h2>
+            <p class="mt-4 text-slate-600 dark:text-slate-300">
+              I'm a full‑stack developer focused on building beautiful, performant products. I value clear communication, thoughtful UX, and maintainable code.
+            </p>
+            <div class="mt-6 grid grid-cols-3 gap-4">
+              <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 p-5 text-center shadow-soft">
+                <div class="text-3xl font-extrabold text-primary-600" data-counter="3">0</div>
+                <div class="text-xs text-slate-500 mt-1">Years Experience</div>
+              </div>
+              <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 p-5 text-center shadow-soft">
+                <div class="text-3xl font-extrabold text-primary-600" data-counter="50">0</div>
+                <div class="text-xs text-slate-500 mt-1">Projects</div>
+              </div>
+              <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 p-5 text-center shadow-soft">
+                <div class="text-3xl font-extrabold text-primary-600" data-counter="12">0</div>
+                <div class="text-xs text-slate-500 mt-1">Happy Clients</div>
+              </div>
+            </div>
+            <div class="mt-8 flex items-center gap-3">
+              <a href="#" id="aboutResume" class="inline-flex items-center gap-2 rounded-xl px-5 py-3 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500 text-slate-700 dark:text-slate-200 hover:text-primary-700 dark:hover:text-primary-300 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16l4-4h6a2 2 0 002-2V4a2 2 0 00-2-2z"/></svg>
+                View Resume
+              </a>
+              <button id="copyEmailBtn" class="inline-flex items-center gap-2 rounded-xl px-5 py-3 border border-slate-200 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500 text-slate-700 dark:text-slate-200 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 00-2 2v12h2V3h12V1zm3 4H8a2 2 0 00-2 2v14a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2zm0 16H8V7h11v14z"/></svg>
+                Copy Email
+              </button>
+              <a id="vcardBtn" href="#" download class="inline-flex items-center gap-2 rounded-xl px-5 py-3 border border-slate-200 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500 text-slate-700 dark:text-slate-200 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 00-2 2v10h2V6h16v12h-7v2h7a2 2 0 002-2V6a2 2 0 00-2-2z"/><path d="M14 10h-3V7H9v3H6v2h3v3h2v-3h3v-2z"/></svg>
+                vCard
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="scroll-mt-28 py-20 sm:py-24 bg-slate-50/60 dark:bg-slate-900/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Skills</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">Core technologies and tools I use daily.</p>
+        </div>
+
+        <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 2L1 21h22L12 2z"/></svg>
+              </span>
+              <div class="font-semibold">HTML & CSS</div>
+            </div>
+            <div class="mt-4 h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+              <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-fuchsia-500 rounded-full" style="width: 0%" data-progress="95"></div>
+            </div>
+            <div class="mt-2 text-xs text-slate-500">95%</div>
+          </div>
+
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-primary-600 to-emerald-400 text-white shadow-soft">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h12v2H3v-2zm0 4h12v2H3v-2z"/></svg>
+              </span>
+              <div class="font-semibold">JavaScript</div>
+            </div>
+            <div class="mt-4 h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+              <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-emerald-400 rounded-full" style="width: 0%" data-progress="90"></div>
+            </div>
+            <div class="mt-2 text-xs text-slate-500">90%</div>
+          </div>
+
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-fuchsia-500 to-emerald-400 text-white shadow-soft">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              </span>
+              <div class="font-semibold">Accessibility</div>
+            </div>
+            <div class="mt-4 h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+              <div class="skill-bar h-full bg-gradient-to-r from-fuchsia-500 to-emerald-400 rounded-full" style="width: 0%" data-progress="85"></div>
+            </div>
+            <div class="mt-2 text-xs text-slate-500">85%</div>
+          </div>
+
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-primary-600 to-sky-400 text-white shadow-soft">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M4 6h16v12H4z"/></svg>
+              </span>
+              <div class="font-semibold">React</div>
+            </div>
+            <div class="mt-4 h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+              <div class="skill-bar h-full bg-gradient-to-r from-primary-600 to-sky-400 rounded-full" style="width: 0%" data-progress="88"></div>
+            </div>
+            <div class="mt-2 text-xs text-slate-500">88%</div>
+          </div>
+
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-500 to-lime-400 text-white shadow-soft">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M21 7L9 19l-5.5-5.5 1.4-1.4L9 16.2 19.6 5.6 21 7z"/></svg>
+              </span>
+              <div class="font-semibold">Testing</div>
+            </div>
+            <div class="mt-4 h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+              <div class="skill-bar h-full bg-gradient-to-r from-emerald-500 to-lime-400 rounded-full" style="width: 0%" data-progress="80"></div>
+            </div>
+            <div class="mt-2 text-xs text-slate-500">80%</div>
+          </div>
+
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-rose-500 to-orange-400 text-white shadow-soft">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 7l5 10H7l5-10z"/></svg>
+              </span>
+              <div class="font-semibold">UI/UX</div>
+            </div>
+            <div class="mt-4 h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+              <div class="skill-bar h-full bg-gradient-to-r from-rose-500 to-orange-400 rounded-full" style="width: 0%" data-progress="92"></div>
+            </div>
+            <div class="mt-2 text-xs text-slate-500">92%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="scroll-mt-28 py-20 sm:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Projects</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">A selection of my favorite work.</p>
+        </div>
+
+        <!-- Filters & Search -->
+        <div class="mt-8 flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between reveal">
+          <div class="flex flex-wrap gap-2" role="tablist" aria-label="Project filters">
+            <button class="filter-chip active inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 hover:border-primary-400 dark:hover:border-primary-500" data-filter="all">All</button>
+            <button class="filter-chip inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 hover:border-primary-400 dark:hover:border-primary-500" data-filter="web">Web</button>
+            <button class="filter-chip inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 hover:border-primary-400 dark:hover:border-primary-500" data-filter="mobile">Mobile</button>
+            <button class="filter-chip inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 hover:border-primary-400 dark:hover:border-primary-500" data-filter="design">Design</button>
+          </div>
+          <div class="relative max-w-md w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z"/></svg>
+            <input id="projectSearch" type="search" placeholder="Search projects..." class="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 pl-10 pr-3 py-2 outline-none focus:border-primary-400 dark:focus:border-primary-500 focus:shadow-glow transition" />
+          </div>
+        </div>
+
+        <div id="projectsGrid" class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Card 1 -->
+          <article class="project-card reveal group rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft" data-category="web" data-title="Analytics Dashboard" data-description="Interactive metrics dashboard with charts and real-time data." data-live="https://example.com/demo1" data-code="https://github.com/example/demo1">
+            <div class="relative aspect-[16/10] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop" alt="Dashboard UI" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-semibold text-lg">Analytics Dashboard</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Interactive metrics dashboard with charts and real-time data.</p>
+              <div class="mt-4 flex gap-2">
+                <button class="btn-view inline-flex items-center gap-2 text-primary-600 hover:gap-3 transition">View Project <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="project-card reveal group rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft" data-category="web" data-title="Collab App" data-description="Real-time collaboration with presence and comments." data-live="https://example.com/demo2" data-code="https://github.com/example/demo2">
+            <div class="relative aspect-[16/10] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="Team collaboration app" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div class="p-6">
+              <h3 class="font-semibold text-lg">Collab App</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Real-time collaboration with presence and comments.</p>
+              <div class="mt-4 flex gap-2">
+                <button class="btn-view inline-flex items-center gap-2 text-primary-600 hover:gap-3 transition">View Project <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="project-card reveal group rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft" data-category="design" data-title="Component Library" data-description="Typed UI kit with accessibility-first components." data-live="https://example.com/demo3" data-code="https://github.com/example/demo3">
+            <div class="relative aspect-[16/10] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop" alt="Code editor" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div class="p-6">
+              <h3 class="font-semibold text-lg">Component Library</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Typed UI kit with accessibility-first components.</p>
+              <div class="mt-4 flex gap-2">
+                <button class="btn-view inline-flex items-center gap-2 text-primary-600 hover:gap-3 transition">View Project <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="project-card reveal group rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft" data-category="web" data-title="E‑commerce Platform" data-description="Scalable storefront with cart and checkout." data-live="https://example.com/demo4" data-code="https://github.com/example/demo4">
+            <div class="relative aspect-[16/10] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="Laptop and code" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div class="p-6">
+              <h3 class="font-semibold text-lg">E‑commerce Platform</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Scalable storefront with cart and checkout.</p>
+              <div class="mt-4 flex gap-2">
+                <button class="btn-view inline-flex items-center gap-2 text-primary-600 hover:gap-3 transition">View Project <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5 -->
+          <article class="project-card reveal group rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft" data-category="mobile" data-title="Mobile Banking" data-description="Secure finance app with budgeting tools." data-live="https://example.com/demo5" data-code="https://github.com/example/demo5">
+            <div class="relative aspect-[16/10] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1517433456452-f9633a875f6f?q=80&w=1200&auto=format&fit=crop" alt="Mobile app UI" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div class="p-6">
+              <h3 class="font-semibold text-lg">Mobile Banking</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Secure finance app with budgeting tools.</p>
+              <div class="mt-4 flex gap-2">
+                <button class="btn-view inline-flex items-center gap-2 text-primary-600 hover:gap-3 transition">View Project <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6 -->
+          <article class="project-card reveal group rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft" data-category="design" data-title="Design System" data-description="Tokens, guidelines, and tooling for teams." data-live="https://example.com/demo6" data-code="https://github.com/example/demo6">
+            <div class="relative aspect-[16/10] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1200&auto=format&fit=crop" alt="Design process" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div class="p-6">
+              <h3 class="font-semibold text-lg">Design System</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Tokens, guidelines, and tooling for teams.</p>
+              <div class="mt-4 flex gap-2">
+                <button class="btn-view inline-flex items-center gap-2 text-primary-600 hover:gap-3 transition">View Project <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg></button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <p id="noResults" class="hidden mt-8 text-center text-slate-500">No projects match your search.</p>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="scroll-mt-28 py-20 sm:py-24 bg-slate-50/60 dark:bg-slate-900/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Services</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">What I can do for you.</p>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-3 gap-6">
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 p-6 shadow-soft">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M4 6h16v12H4z"/></svg>
+            </span>
+            <h3 class="mt-4 font-semibold text-lg">Web Development</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Responsive websites and web apps with modern stacks.</p>
+            <div class="mt-4 flex gap-2">
+              <button class="service-more inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500">Learn More</button>
+              <button class="service-quote inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft hover:shadow-glow transition" data-service-name="Web Development">Get a Quote</button>
+            </div>
+          </div>
+
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 p-6 shadow-soft">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-500 to-lime-400 text-white shadow-soft">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M4 4h16v4H4zM4 10h16v10H4z"/></svg>
+            </span>
+            <h3 class="mt-4 font-semibold text-lg">UI/UX Design</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Human‑centered design systems and delightful interfaces.</p>
+            <div class="mt-4 flex gap-2">
+              <button class="service-more inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500">Learn More</button>
+              <button class="service-quote inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-tr from-emerald-500 to-lime-400 text-white shadow-soft hover:shadow-glow transition" data-service-name="UI/UX Design">Get a Quote</button>
+            </div>
+          </div>
+
+          <div class="reveal rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 p-6 shadow-soft">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-rose-500 to-orange-400 text-white shadow-soft">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M12 2l9 4-9 4-9-4 9-4zm0 7l9 4-9 4-9-4 9-4zm0 7l9 4-9 4-9-4 9-4z"/></svg>
+            </span>
+            <h3 class="mt-4 font-semibold text-lg">Consulting</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Architecture reviews, performance, and accessibility audits.</p>
+            <div class="mt-4 flex gap-2">
+              <button class="service-more inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500">Learn More</button>
+              <button class="service-quote inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-tr from-rose-500 to-orange-400 text-white shadow-soft hover:shadow-glow transition" data-service-name="Consulting">Get a Quote</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="scroll-mt-28 py-20 sm:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Testimonials</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">What clients say.</p>
+        </div>
+
+        <div class="mt-10 reveal rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+          <div class="relative" data-slider tabindex="0" aria-label="Testimonials slider">
+            <div class="overflow-hidden">
+              <div class="flex transition-transform duration-700 ease-out" data-slides>
+                <figure class="shrink-0 w-full">
+                  <blockquote class="text-lg">"Outstanding collaborator. Delivered above expectations with clean, scalable code."</blockquote>
+                  <figcaption class="mt-4 text-sm text-slate-600 dark:text-slate-300">— Alex Johnson, Product Lead</figcaption>
+                </figure>
+                <figure class="shrink-0 w-full">
+                  <blockquote class="text-lg">"A rare mix of design taste and engineering rigor. Highly recommended."</blockquote>
+                  <figcaption class="mt-4 text-sm text-slate-600 dark:text-slate-300">— Priya Sharma, Design Manager</figcaption>
+                </figure>
+                <figure class="shrink-0 w-full">
+                  <blockquote class="text-lg">"Transformed our platform's performance and accessibility in weeks."</blockquote>
+                  <figcaption class="mt-4 text-sm text-slate-600 dark:text-slate-300">— Marco Li, CTO</figcaption>
+                </figure>
+              </div>
+            </div>
+            <div class="mt-6 flex items-center justify-between">
+              <div class="flex gap-2" data-dots></div>
+              <div class="flex gap-2">
+                <button class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 hover:shadow-soft" data-prev aria-label="Previous">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <button class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 hover:shadow-soft" data-next aria-label="Next">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="scroll-mt-28 py-20 sm:py-24 bg-slate-50/60 dark:bg-slate-900/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Contact</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">Let's build something great together.</p>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-2 gap-8 items-start">
+          <form id="contactForm" novalidate class="reveal rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+            <div class="grid gap-5">
+              <div>
+                <label for="name" class="text-sm font-medium">Name</label>
+                <input id="name" name="name" type="text" required placeholder="John Doe" class="mt-2 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/60 px-4 py-3 outline-none focus:border-primary-400 dark:focus:border-primary-500 focus:shadow-glow transition" />
+                <p class="mt-1 text-xs text-rose-500 hidden" data-error-for="name">Please enter at least 2 characters.</p>
+              </div>
+              <div>
+                <label for="email" class="text-sm font-medium">Email</label>
+                <input id="email" name="email" type="email" required placeholder="you@example.com" class="mt-2 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/60 px-4 py-3 outline-none focus:border-primary-400 dark:focus:border-primary-500 focus:shadow-glow transition" />
+                <p class="mt-1 text-xs text-rose-500 hidden" data-error-for="email">Please enter a valid email.</p>
+              </div>
+              <div>
+                <label for="subject" class="text-sm font-medium">Subject (optional)</label>
+                <input id="subject" name="subject" type="text" placeholder="Web app project, redesign, ..." class="mt-2 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/60 px-4 py-3 outline-none focus:border-primary-400 dark:focus:border-primary-500 focus:shadow-glow transition" />
+              </div>
+              <div>
+                <label for="message" class="text-sm font-medium">Message</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Tell me a bit about your project..." class="mt-2 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/60 px-4 py-3 outline-none focus:border-primary-400 dark:focus:border-primary-500 focus:shadow-glow transition"></textarea>
+                <p class="mt-1 text-xs text-rose-500 hidden" data-error-for="message">Please enter at least 10 characters.</p>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft hover:shadow-glow transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+                  Send Message
+                </button>
+                <button id="whatsAppBtn" type="button" class="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 border border-emerald-300/70 dark:border-emerald-600/60 text-emerald-700 dark:text-emerald-300 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0012 7.48v1A10.66 10.66 0 013 4s-4 9 5 13l-1 4 4-1c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0020 3z"/></svg>
+                  WhatsApp
+                </button>
+                <button id="contactSchedule" type="button" class="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M7 11h5v5H7z"/><path d="M17 3h-1V1h-2v2H10V1H8v2H7a2 2 0 00-2 2v13a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2zm0 15H7V8h10v10z"/></svg>
+                  Schedule a Call
+                </button>
+              </div>
+              <p id="formSuccess" class="hidden text-sm text-emerald-600">Message sent! I'll get back to you soon.</p>
+            </div>
+          </form>
+
+          <div class="reveal-right grid gap-5">
+            <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+              <h3 class="font-semibold">Find me online</h3>
+              <div class="mt-4 flex items-center gap-4 text-slate-600 dark:text-slate-300">
+                <a href="https://github.com/" target="_blank" rel="noreferrer" class="group inline-flex items-center gap-2 hover:text-slate-900 dark:hover:text-white transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12a10 10 0 006.838 9.488c.5.092.682-.217.682-.482 0-.237-.009-.867-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.464-1.11-1.464-.907-.62.069-.607.069-.607 1.003.071 1.53 1.03 1.53 1.03.892 1.527 2.341 1.086 2.91.831.091-.647.35-1.086.636-1.337-2.221-.253-4.555-1.111-4.555-4.944 0-1.091.39-1.984 1.03-2.682-.104-.254-.447-1.274.098-2.655 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844a9.56 9.56 0 012.504.337c1.909-1.294 2.748-1.025 2.748-1.025.546 1.381.203 2.401.1 2.655.64.698 1.03 1.59 1.03 2.681 0 3.842-2.337 4.688-4.565 4.938.359.31.678.92.678 1.855 0 1.338-.012 2.418-.012 2.748 0 .268.18.579.688.48A10.002 10.002 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"/></svg>
+                  GitHub
+                </a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" class="group inline-flex items-center gap-2 hover:text-slate-900 dark:hover:text-white transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.1c.5-1 1.8-2.2 3.7-2.2 4 0 4.8 2.6 4.8 6V24h-4v-6.6c0-1.6 0-3.6-2.2-3.6s-2.6 1.7-2.6 3.5V24h-4V8z"/></svg>
+                  LinkedIn
+                </a>
+                <a href="mailto:you@example.com" class="group inline-flex items-center gap-2 hover:text-slate-900 dark:hover:text-white transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6.5a.5.5 0 00-.8-.4L12 12 3.8 6.1a.5.5 0 00-.8.4V18a2 2 0 002 2h14a2 2 0 002-2V6.5z"/></svg>
+                  Email
+                </a>
+              </div>
+            </div>
+
+            <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-soft p-6">
+              <h3 class="font-semibold">Location</h3>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Remote • Worldwide</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 border-t border-slate-200/60 dark:border-slate-800/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-600 dark:text-slate-400">
+          <p>© <span id="year"></span> Your Name. All rights reserved.</p>
+          <nav class="flex items-center gap-4">
+            <a href="#home" class="hover:text-slate-900 dark:hover:text-white transition">Home</a>
+            <a href="#projects" class="hover:text-slate-900 dark:hover:text-white transition">Projects</a>
+            <a href="#contact" class="hover:text-slate-900 dark:hover:text-white transition">Contact</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button id="backToTop" class="fixed bottom-6 right-6 hidden h-12 w-12 rounded-full bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft hover:shadow-glow transition" aria-label="Back to top">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 m-auto" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+    </button>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="hidden fixed inset-0 z-[70] items-end sm:items-center justify-center">
+      <div class="absolute inset-0 bg-slate-900/60" data-close></div>
+      <div class="relative w-full sm:max-w-2xl mx-auto bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl shadow-soft border border-slate-200 dark:border-slate-800 p-6 glass">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 id="projectTitle" class="text-xl font-semibold"></h3>
+            <p id="projectDesc" class="mt-1 text-sm text-slate-600 dark:text-slate-300"></p>
+          </div>
+          <button class="h-10 w-10 rounded-xl border border-slate-200 dark:border-slate-800 hover:shadow-soft" data-close aria-label="Close modal">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 m-auto" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.71 2.88 18.3 9.17 12 2.88 5.71 4.29 4.29 10.59 10.6l6.3-6.31z"/></svg>
+          </button>
+        </div>
+        <div class="mt-4">
+          <img id="projectImage" src="" alt="Project image" class="w-full rounded-2xl ring-1 ring-slate-900/10 dark:ring-white/10" />
+        </div>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a id="projectLive" href="#" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft hover:shadow-glow transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3v2h3.59L7 15.59 8.41 17 19 6.41V10h2V3h-7z"/></svg>
+            Live Demo
+          </a>
+          <a id="projectCode" href="#" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.34L3.25 11l5.34-5.34L7.17 4.25 0.42 11l6.75 6.75 1.42-1.41zM15.41 16.34l5.34-5.34-5.34-5.34L16.83 4.25 23.58 11l-6.75 6.75-1.42-1.41z"/></svg>
+            Source Code
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="hidden fixed inset-0 z-[70] items-end sm:items-center justify-center">
+      <div class="absolute inset-0 bg-slate-900/60" data-close></div>
+      <div class="relative w-full sm:max-w-xl mx-auto bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl shadow-soft border border-slate-200 dark:border-slate-800 p-6 glass">
+        <div class="flex items-start justify-between gap-4">
+          <h3 id="serviceTitle" class="text-xl font-semibold">Service</h3>
+          <button class="h-10 w-10 rounded-xl border border-slate-200 dark:border-slate-800 hover:shadow-soft" data-close aria-label="Close modal">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 m-auto" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.71 2.88 18.3 9.17 12 2.88 5.71 4.29 4.29 10.59 10.6l6.3-6.31z"/></svg>
+          </button>
+        </div>
+        <div id="serviceBody" class="mt-3 text-sm text-slate-600 dark:text-slate-300">
+          <!-- dynamic -->
+        </div>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <button id="serviceQuoteBtn" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft hover:shadow-glow transition">Get a Quote</button>
+          <a href="#contact" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div id="scheduleModal" class="hidden fixed inset-0 z-[70] items-end sm:items-center justify-center">
+      <div class="absolute inset-0 bg-slate-900/60" data-close></div>
+      <div class="relative w-full sm:max-w-lg mx-auto bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl shadow-soft border border-slate-200 dark:border-slate-800 p-6 glass">
+        <div class="flex items-start justify-between gap-4">
+          <h3 class="text-xl font-semibold">Schedule a Call</h3>
+          <button class="h-10 w-10 rounded-xl border border-slate-200 dark:border-slate-800 hover:shadow-soft" data-close aria-label="Close modal">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 m-auto" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.71 2.88 18.3 9.17 12 2.88 5.71 4.29 4.29 10.59 10.6l6.3-6.31z"/></svg>
+          </button>
+        </div>
+        <form id="scheduleForm" class="mt-4 grid gap-4">
+          <div>
+            <label class="text-sm font-medium">Duration</label>
+            <div class="mt-2 grid grid-cols-3 gap-2">
+              <label class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 cursor-pointer"><input type="radio" name="duration" value="15" class="sr-only" checked><span>15 min</span></label>
+              <label class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 cursor-pointer"><input type="radio" name="duration" value="30" class="sr-only"><span>30 min</span></label>
+              <label class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 cursor-pointer"><input type="radio" name="duration" value="45" class="sr-only"><span>45 min</span></label>
+            </div>
+          </div>
+          <div>
+            <label for="meetDate" class="text-sm font-medium">Date</label>
+            <input id="meetDate" type="date" class="mt-2 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/60 px-4 py-2 outline-none focus:border-primary-400 dark:focus:border-primary-500 focus:shadow-glow transition" />
+          </div>
+          <div>
+            <label for="meetTime" class="text-sm font-medium">Time</label>
+            <input id="meetTime" type="time" class="mt-2 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/60 px-4 py-2 outline-none focus:border-primary-400 dark:focus:border-primary-500 focus:shadow-glow transition" />
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <button type="submit" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-tr from-primary-600 to-fuchsia-500 text-white shadow-soft hover:shadow-glow transition">Confirm</button>
+            <a id="googleCalLink" href="#" target="_blank" rel="noreferrer" class="hidden inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-primary-400 dark:hover:border-primary-500 bg-white/60 dark:bg-slate-900/60 hover:shadow-soft transition">Add to Google Calendar</a>
+          </div>
+          <p id="scheduleSuccess" class="hidden text-sm text-emerald-600">Slot reserved! Add to your calendar.</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toastRoot" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] space-y-2"></div>
+
+    <!-- App JS -->
+    <script type="module">
+      // Utils
+      const qs = (s, el = document) => el.querySelector(s);
+      const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      const showToast = (message, type = 'default') => {
+        const root = qs('#toastRoot');
+        const el = document.createElement('div');
+        el.className = `toast-enter toast-show mx-auto inline-flex items-center gap-2 rounded-xl px-4 py-2 shadow-soft border ${type === 'success' ? 'bg-emerald-50/90 dark:bg-emerald-900/40 border-emerald-200/60 dark:border-emerald-700/60 text-emerald-700 dark:text-emerald-200' : 'bg-white/90 dark:bg-slate-900/70 border-slate-200 dark:border-slate-800'}`;
+        el.innerHTML = `<span>${message}</span>`;
+        root.appendChild(el);
+        setTimeout(() => {
+          el.classList.remove('toast-show');
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(8px)';
+          setTimeout(() => el.remove(), 220);
+        }, 2200);
+      };
+
+      // Theme toggle
+      (function initThemeToggle() {
+        const btn = qs('#themeToggle');
+        const updateLabel = () => btn.setAttribute('aria-label', document.documentElement.classList.contains('dark') ? 'Switch to light theme' : 'Switch to dark theme');
+        btn?.addEventListener('click', () => {
+          const isDark = document.documentElement.classList.toggle('dark');
+          try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
+          updateLabel();
+        });
+        updateLabel();
+      })();
+
+      // Mobile menu & schedule button
+      (function initMobileMenu() {
+        const btn = qs('#hamburger');
+        const menu = qs('#mobileMenu');
+        const links = qsa('.mobile-link', menu);
+        const toggle = () => {
+          const isOpen = menu.classList.toggle('hidden');
+          btn.setAttribute('aria-expanded', String(!isOpen));
+        };
+        btn?.addEventListener('click', toggle);
+        links.forEach((a) => a.addEventListener('click', () => { if (!menu.classList.contains('hidden')) toggle(); }));
+        qs('#mobileSchedule')?.addEventListener('click', () => { openScheduleModal(); if (!menu.classList.contains('hidden')) toggle(); });
+      })();
+
+      // Active link highlighting
+      (function initActiveNav() {
+        const links = qsa('.nav-link');
+        const sections = links.map((a) => qs(a.getAttribute('href'))).filter(Boolean);
+        const activate = (id) => {
+          links.forEach((a) => {
+            const isActive = a.getAttribute('href') === `#${id}`;
+            a.classList.toggle('text-slate-900', isActive);
+            a.classList.toggle('dark:text-white', isActive);
+            a.classList.toggle('font-semibold', isActive);
+            a.classList.toggle('bg-slate-100/70', isActive);
+            a.classList.toggle('dark:bg-slate-800/60', isActive);
+          });
+        };
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => { if (entry.isIntersecting) activate(entry.target.id); });
+        }, { root: null, rootMargin: '0px 0px -60% 0px', threshold: 0.2 });
+        sections.forEach((sec) => obs.observe(sec));
+      })();
+
+      // Reveal on scroll
+      (function initReveal() {
+        const els = qsa('.reveal, .reveal-left, .reveal-right');
+        const obs = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('reveal-active'); observer.unobserve(entry.target); } });
+        }, { threshold: 0.2 });
+        els.forEach((el) => obs.observe(el));
+      })();
+
+      // Typewriter
+      (async function initTypewriter() {
+        const target = qs('#typeTarget');
+        if (!target) return;
+        const phrases = ['Web Developer', 'Designer', 'Innovator', 'Problem Solver'];
+        let idx = 0;
+        while (true) {
+          const word = phrases[idx % phrases.length];
+          await typeText(target, word);
+          await sleep(1100);
+          await deleteText(target);
+          await sleep(300);
+          idx++;
+        }
+        async function typeText(el, text) {
+          for (let i = 1; i <= text.length; i++) { el.textContent = text.slice(0, i); await sleep(55 + Math.random() * 45); }
+        }
+        async function deleteText(el) {
+          const full = el.textContent || '';
+          for (let i = full.length; i >= 0; i--) { el.textContent = full.slice(0, i); await sleep(30 + Math.random() * 35); }
+        }
+      })();
+
+      // Skills bars and counters
+      (function initSkills() {
+        const bars = qsa('.skill-bar');
+        const counters = qsa('[data-counter]');
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const bar = entry.target;
+            const pct = clamp(parseInt(bar.getAttribute('data-progress') || '0', 10), 0, 100);
+            bar.style.transition = 'width 1200ms cubic-bezier(.2,.8,.2,1)';
+            requestAnimationFrame(() => (bar.style.width = pct + '%'));
+            obs.unobserve(bar);
+          });
+        }, { threshold: 0.35 });
+        bars.forEach((b) => obs.observe(b));
+
+        const obs2 = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const end = parseInt(el.getAttribute('data-counter') || '0', 10);
+            animateCount(el, end, 1000);
+            obs2.unobserve(el);
+          });
+        }, { threshold: 0.35 });
+        counters.forEach((c) => obs2.observe(c));
+
+        function animateCount(el, end, duration) {
+          const start = 0; const startTime = performance.now();
+          const tick = (now) => {
+            const t = clamp((now - startTime) / duration, 0, 1);
+            const eased = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+            el.textContent = String(Math.round(start + (end - start) * eased));
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      })();
+
+      // Projects: filter + search + modal
+      (function initProjects() {
+        const chips = qsa('.filter-chip');
+        const search = qs('#projectSearch');
+        const cards = qsa('.project-card');
+        const noResults = qs('#noResults');
+        let current = 'all';
+        function styleChip(chip, active) {
+          chip.classList.toggle('bg-gradient-to-r', active);
+          chip.classList.toggle('from-primary-600', active);
+          chip.classList.toggle('to-fuchsia-500', active);
+          chip.classList.toggle('text-white', active);
+          chip.classList.toggle('border-transparent', active);
+          chip.classList.toggle('bg-white/60', !active);
+          chip.classList.toggle('dark:bg-slate-900/60', !active);
+          chip.setAttribute('aria-pressed', String(active));
+        }
+        chips.forEach((c) => c.addEventListener('click', () => {
+          current = c.dataset.filter;
+          chips.forEach((x) => styleChip(x, x === c));
+          apply();
+        }));
+        // initial style
+        chips.forEach((x) => styleChip(x, (x.dataset.filter || 'all') === current));
+        search?.addEventListener('input', apply);
+
+        function apply() {
+          const q = (search?.value || '').toLowerCase().trim();
+          let visible = 0;
+          cards.forEach((card) => {
+            const cat = card.dataset.category || '';
+            const title = (card.dataset.title || '').toLowerCase();
+            const desc = (card.dataset.description || '').toLowerCase();
+            const matchesCat = current === 'all' || cat === current;
+            const matchesText = !q || title.includes(q) || desc.includes(q);
+            const show = matchesCat && matchesText;
+            card.classList.toggle('hidden', !show);
+            card.style.transform = show ? 'none' : 'scale(0.98)';
+            card.style.opacity = show ? '1' : '0';
+            if (show) visible++;
+          });
+          noResults.classList.toggle('hidden', visible !== 0);
+        }
+        apply();
+
+        // Modal wiring
+        const modal = qs('#projectModal');
+        const title = qs('#projectTitle');
+        const desc = qs('#projectDesc');
+        const img = qs('#projectImage');
+        const live = qs('#projectLive');
+        const code = qs('#projectCode');
+
+        qsa('.btn-view').forEach((btn) => btn.addEventListener('click', (e) => {
+          const card = e.currentTarget.closest('.project-card');
+          if (!card) return;
+          title.textContent = card.dataset.title || '';
+          desc.textContent = card.dataset.description || '';
+          const imageEl = card.querySelector('img');
+          img.src = imageEl ? imageEl.src : '';
+          img.alt = title.textContent + ' preview';
+          live.href = card.dataset.live || '#';
+          code.href = card.dataset.code || '#';
+          openModal(modal);
+        }));
+
+        modal.addEventListener('click', (e) => { if (e.target.hasAttribute('data-close')) closeModal(modal); });
+        qsa('[data-close]', modal).forEach((b) => b.addEventListener('click', () => closeModal(modal)));
+      })();
+
+      // Services: learn more + quote
+      (function initServices() {
+        const modal = qs('#serviceModal');
+        const body = qs('#serviceBody');
+        const title = qs('#serviceTitle');
+        qsa('.service-more').forEach((btn, idx) => btn.addEventListener('click', (e) => {
+          const card = e.currentTarget.closest('.p-6');
+          const heading = card.querySelector('h3')?.textContent || 'Service';
+          title.textContent = heading;
+          body.innerHTML = `<ul class="list-disc pl-5 space-y-1"><li>Discovery and requirements</li><li>Design and prototyping</li><li>Implementation with best practices</li><li>Testing, performance, and accessibility</li><li>Launch and support</li></ul>`;
+          qs('#serviceQuoteBtn').dataset.serviceName = heading;
+          openModal(modal);
+        }));
+        qsa('.service-quote').forEach((btn) => btn.addEventListener('click', (e) => {
+          const name = e.currentTarget.dataset.serviceName || 'Service Inquiry';
+          prefillContact(name);
+          showToast('Quote form pre-filled', 'success');
+          document.location.hash = '#contact';
+        }));
+        qs('#serviceQuoteBtn').addEventListener('click', () => {
+          const name = qs('#serviceQuoteBtn').dataset.serviceName || 'Service Inquiry';
+          prefillContact(name);
+          closeModal(modal);
+          document.location.hash = '#contact';
+          showToast('Quote form pre-filled', 'success');
+        });
+        modal.addEventListener('click', (e) => { if (e.target.hasAttribute('data-close')) closeModal(modal); });
+        qsa('[data-close]', modal).forEach((b) => b.addEventListener('click', () => closeModal(modal)));
+      })();
+
+      function prefillContact(serviceName) {
+        const subject = qs('#subject');
+        const message = qs('#message');
+        if (subject) subject.value = `${serviceName} inquiry`;
+        if (message && !message.value) message.value = `Hi, I'm interested in ${serviceName}. Here are some details: \n- Timeline: \n- Budget: \n- Scope:`;
+      }
+
+      // Testimonials slider: auto, keyboard, swipe
+      (function initSlider() {
+        const root = qs('[data-slider]');
+        if (!root) return;
+        const track = qs('[data-slides]', root);
+        const slides = qsa('figure', track);
+        const dotsRoot = qs('[data-dots]', root);
+        const btnPrev = qs('[data-prev]', root);
+        const btnNext = qs('[data-next]', root);
+        let index = 0; let timer = null; let startX = 0; let dx = 0; const SWIPE = 40;
+
+        slides.forEach((_, i) => {
+          const dot = document.createElement('button');
+          dot.className = 'h-2.5 w-2.5 rounded-full bg-slate-300 dark:bg-slate-700';
+          dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          dot.addEventListener('click', () => go(i));
+          dotsRoot.appendChild(dot);
+        });
+        const dots = qsa('button', dotsRoot);
+
+        const update = () => {
+          track.style.transform = `translateX(-${index * 100}%)`;
+          dots.forEach((d, i) => d.classList.toggle('bg-primary-500', i === index));
+        };
+        const go = (i) => { index = (i + slides.length) % slides.length; update(); restart(); };
+        const next = () => go(index + 1);
+        const prev = () => go(index - 1);
+        const restart = () => { clearInterval(timer); timer = setInterval(next, 5000); };
+
+        btnPrev?.addEventListener('click', prev);
+        btnNext?.addEventListener('click', next);
+        root.addEventListener('mouseenter', () => clearInterval(timer));
+        root.addEventListener('mouseleave', restart);
+        root.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') next(); if (e.key === 'ArrowLeft') prev(); });
+        root.addEventListener('pointerdown', (e) => { startX = e.clientX; dx = 0; root.setPointerCapture(e.pointerId); });
+        root.addEventListener('pointermove', (e) => { if (startX) dx = e.clientX - startX; });
+        root.addEventListener('pointerup', (e) => { if (Math.abs(dx) > SWIPE) { dx < 0 ? next() : prev(); } startX = 0; dx = 0; });
+
+        update();
+        restart();
+      })();
+
+      // Contact form validation + WhatsApp + Schedule button
+      (function initForm() {
+        const form = qs('#contactForm');
+        if (!form) return;
+        const success = qs('#formSuccess');
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = qs('#name').value.trim();
+          const email = qs('#email').value.trim();
+          const message = qs('#message').value.trim();
+
+          const errs = {
+            name: !(name.length >= 2),
+            email: !/^\S+@\S+\.\S+$/.test(email),
+            message: !(message.length >= 10)
+          };
+          Object.entries(errs).forEach(([field, hasError]) => {
+            const p = qs(`[data-error-for="${field}"]`);
+            p.classList.toggle('hidden', !hasError);
+          });
+          if (Object.values(errs).some(Boolean)) return;
+
+          form.querySelector('button[type="submit"]').disabled = true;
+          await sleep(600);
+          form.reset();
+          form.querySelector('button[type="submit"]').disabled = false;
+          success.classList.remove('hidden');
+          showToast('Message sent!', 'success');
+          setTimeout(() => success.classList.add('hidden'), 3500);
+        });
+
+        qs('#whatsAppBtn')?.addEventListener('click', () => {
+          const name = qs('#name').value.trim();
+          const subject = qs('#subject').value.trim();
+          const message = qs('#message').value.trim();
+          const text = encodeURIComponent(`Hello!${name ? ' I am ' + name + '.' : ''} ${subject ? '(' + subject + ')' : ''} ${message ? '\n' + message : ''}`);
+          const url = `https://wa.me/?text=${text}`;
+          window.open(url, '_blank');
+        });
+
+        const scheduleBtns = ['#contactSchedule', '#scheduleBtn', '#heroSchedule'];
+        scheduleBtns.forEach((sel) => qs(sel)?.addEventListener('click', openScheduleModal));
+      })();
+
+      // Copy email + vCard
+      (function initIdentityTools() {
+        const email = 'you@example.com';
+        qs('#copyEmailBtn')?.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(email); showToast('Email copied!', 'success'); } catch { showToast('Could not copy'); }
+        });
+        const vcard = `BEGIN:VCARD\nVERSION:3.0\nN:Your Name\nFN:Your Name\nEMAIL:${'you@example.com'}\nURL:${'https://example.com'}\nEND:VCARD`;
+        const vcardUri = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
+        const vBtn = qs('#vcardBtn'); if (vBtn) { vBtn.href = vcardUri; vBtn.download = 'YourName.vcf'; }
+      })();
+
+      // Back to top and scroll progress
+      (function initScrollUi() {
+        const btn = qs('#backToTop');
+        const bar = qs('#scrollProgress');
+        const onScroll = () => {
+          const y = window.scrollY || document.documentElement.scrollTop;
+          btn.classList.toggle('hidden', y < 500);
+          const h = document.documentElement.scrollHeight - window.innerHeight;
+          const pct = h > 0 ? (y / h) * 100 : 0;
+          bar.style.width = pct + '%';
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        onScroll();
+      })();
+
+      // Footer year
+      qs('#year').textContent = new Date().getFullYear();
+
+      // CV and Resume download
+      (function initCv() {
+        const btn = qs('#downloadCvBtn');
+        const aboutBtn = qs('#aboutResume');
+        const resume = `Your Name\nRole: Web Developer\nEmail: you@example.com\nWebsite: https://example.com\n\nExperience\n- Company A — Senior Developer (2022–Present)\n- Company B — Frontend Engineer (2019–2022)\n\nSkills\n- HTML, CSS, JS, React, Accessibility, Testing`; 
+        const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(resume);
+        if (btn) { btn.href = dataUri; btn.download = 'YourName-Resume.txt'; }
+        if (aboutBtn) { aboutBtn.href = dataUri; aboutBtn.setAttribute('download', 'YourName-Resume.txt'); }
+      })();
+
+      // Generic modal helpers
+      function openModal(modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+        const focusable = modal.querySelector('[data-close], a, button, input, textarea');
+        focusable?.focus();
+        const onKey = (e) => { if (e.key === 'Escape') closeModal(modal); };
+        modal._esc = onKey; window.addEventListener('keydown', onKey);
+      }
+      function closeModal(modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+        if (modal._esc) { window.removeEventListener('keydown', modal._esc); modal._esc = null; }
+      }
+
+      function openScheduleModal() {
+        const modal = qs('#scheduleModal');
+        // set default date/time to tomorrow 10:00
+        const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(10, 0, 0, 0);
+        const yyyy = d.getFullYear(); const mm = String(d.getMonth() + 1).padStart(2, '0'); const dd = String(d.getDate()).padStart(2, '0');
+        qs('#meetDate').value = `${yyyy}-${mm}-${dd}`;
+        qs('#meetTime').value = '10:00';
+        openModal(modal);
+      }
+
+      // Schedule form
+      (function initSchedule() {
+        const modal = qs('#scheduleModal');
+        const form = qs('#scheduleForm');
+        const success = qs('#scheduleSuccess');
+        const gcal = qs('#googleCalLink');
+        const durationInputs = qsa('input[name="duration"]', form);
+        const styleDurations = () => {
+          durationInputs.forEach((inp) => {
+            const lab = inp.closest('label');
+            const active = inp.checked;
+            lab.classList.toggle('bg-gradient-to-tr', active);
+            lab.classList.toggle('from-primary-600', active);
+            lab.classList.toggle('to-fuchsia-500', active);
+            lab.classList.toggle('text-white', active);
+            lab.classList.toggle('border-transparent', active);
+          });
+        };
+        durationInputs.forEach((inp) => inp.addEventListener('change', styleDurations));
+        styleDurations();
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const duration = (qs('input[name="duration"]:checked', form)?.value || '15');
+          const date = qs('#meetDate').value; const time = qs('#meetTime').value;
+          if (!date || !time) { showToast('Pick a date and time'); return; }
+          const start = new Date(`${date}T${time}:00`);
+          const end = new Date(start.getTime() + parseInt(duration, 10) * 60000);
+          const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+          const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Intro call with Your Name')}&dates=${fmt(start)}/${fmt(end)}&details=${encodeURIComponent('Looking forward to our chat!')}`;
+          gcal.href = url; gcal.classList.remove('hidden');
+          success.classList.remove('hidden');
+          showToast('Slot reserved! Add to calendar', 'success');
+        });
+        modal.addEventListener('click', (e) => { if (e.target.hasAttribute('data-close')) closeModal(modal); });
+        qsa('[data-close]', modal).forEach((b) => b.addEventListener('click', () => closeModal(modal)));
+      })();
+    </script>
+  </body>
+</html>
