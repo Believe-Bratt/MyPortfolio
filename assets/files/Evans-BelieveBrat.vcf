@@ -1,0 +1,8 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Evans;;;;
+FN:Evans (Believe Brat)
+ORG:Believe Brat
+EMAIL;TYPE=INTERNET:you@example.com
+URL:https://example.com
+END:VCARD

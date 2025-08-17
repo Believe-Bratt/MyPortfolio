@@ -1,0 +1,28 @@
+Evans (Believe Brat)
+Role: Web Developer / Flutter Developer
+Email: you@example.com
+Website: https://example.com
+
+Summary
+Full‑stack engineer focused on clean UX, accessibility, and high‑performance web and mobile apps (Flutter).
+
+Experience
+- Company A — Senior Developer (2022–Present)
+  Led frontend architecture, accessibility, and performance initiatives across multiple squads.
+- Company B — Frontend Engineer (2019–2022)
+  Built design systems and data visualizations used by 100k+ users.
+
+Selected Projects
+- Analytics Dashboard — Real-time metrics, charts, and admin tooling
+- Mobile Banking — Secure budgeting, notifications, and offline support
+
+Skills
+- Web: HTML, CSS, Tailwind, JavaScript, React
+- Mobile: Flutter, Dart
+- Quality: Testing, Accessibility, Performance
+
+Education
+- B.S. in Computer Science (or relevant equivalent)
+
+Contact
+Open for new opportunities and collaborations.
